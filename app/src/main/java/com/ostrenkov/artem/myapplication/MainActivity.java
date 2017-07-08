@@ -475,7 +475,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReadyForSpeech(Bundle params)
         {
-            // Log.d(TAG, "onReadyForSpeech"); //$NON-NLS-1$
+            // Log.d(TAG, "onReadyForSpeech"); //$NON-NLS-1$ 
 
         }
 
