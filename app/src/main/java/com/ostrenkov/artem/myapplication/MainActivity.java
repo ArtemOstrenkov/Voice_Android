@@ -5,10 +5,14 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
+import android.speech.tts.Voice;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -16,11 +20,13 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewDebug;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +44,11 @@ import org.json.JSONObject;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,7 +64,12 @@ public class MainActivity extends AppCompatActivity {
     public String sAnswer = "Что вы хотите подобрать?";
     public Button bPress = null;
     public String HTMLmessage = "<h3>" +sAnswer + "</h3>";
-
+    public Handler mainHandler = null;
+    public Runnable myRunnable = null;
+    public TextView mTextStatus = null;
+    public ScrollView mScrollView = null;
+    private int tryagainlimit = 4;
+    public int tryagain = tryagainlimit;
 
     public String AddToHtml ( String newString) {
 
@@ -131,6 +146,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void scrollToBottom()
+    {
+        mScrollView.post(new Runnable()
+        {
+            public void run()
+            {
+                mScrollView.smoothScrollTo(0, mTextStatus.getBottom());
+            }
+        });
+    }
 
     public void SendMessageold(final String sMyMessageInternal){
 
@@ -242,6 +267,8 @@ public class MainActivity extends AppCompatActivity {
         tvMain.setVisibility(View.GONE);
         ((TextView) findViewById(R.id.textChat)).setText(Html.fromHtml(AddToHtmlRight(sMyMessageInternal)));
 
+        scrollToBottom();
+
         RequestQueue queue = Volley.newRequestQueue(this);
         //String url = "http://92.53.108.10:7888/api/v1/write";
         String url = "http://82.202.192.186:10500";
@@ -302,6 +329,8 @@ public class MainActivity extends AppCompatActivity {
                         tvMain.setText(sAnswer);
 
                         ((TextView) findViewById(R.id.textChat)).setText(Html.fromHtml(AddToHtmlleft(sAnswer)));
+
+                        scrollToBottom();
                         StartSpeak(sAnswer);
 
                      ///   StartSpeak(sAnswer);
@@ -347,14 +376,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void onClickTalk(View view) {
-
-        listenRebuild();
-
-    }
 
     public void onClickClear(View view) {
-        SendMessage("отмена");
+
+        listenRebuild();
+        //SendMessage("отмена");
 
         //StartSpeak("Я говорю по русски");
         //tvMain.setText("Что вы бы хотели выбрать?");
@@ -402,6 +428,25 @@ public class MainActivity extends AppCompatActivity {
             // mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
           //  listenRebuild();
 
+            tryagain = tryagain - 1;
+            Log.d("Speech", "tryagain " + tryagain);
+            if (tryagain > 0) {
+                Log.d("Speech", "tryagain > 0 " + tryagain);
+
+                switch (tryagain){
+
+                    case 1 : speakWords("Говорите или отключаюсь");
+                        break;
+                    case 2 : speakWords("Говорите после сигнала");
+                        break;
+                    default:  speakWords("Повторите?");
+
+
+                }
+
+
+                //listenRebuild();
+            }
 
             Log.d("MyTag", "error = " + error);
         }
@@ -440,11 +485,24 @@ public class MainActivity extends AppCompatActivity {
 
            //TODO:послать в очередь
 
-         //   ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+            ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
 
-         //   if (!matches.get(0).equals("")) {
-         //       tvMain.setVisibility(View.VISIBLE);
-         //       tvMain.setText(matches.get(0));}
+            if (!matches.get(0).equals("")) {
+                SendMessage(matches.get(0));
+                tryagain = tryagainlimit;
+                Log.d("Speech", "tryagain " + tryagain);
+            }
+            else {
+
+                tryagain = tryagain - 1;
+                Log.d("Speech", "tryagain " + tryagain);
+                if (tryagain > 0) {
+                    Log.d("Speech", "tryagain > 0 " + tryagain);
+                    listenRebuild();
+                }
+
+            }
+
 
 
         }
@@ -489,6 +547,9 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         bPress = (Button) findViewById(R.id.bPress);
 
+        mTextStatus = (TextView) findViewById(R.id.textChat);
+        mScrollView = (ScrollView) findViewById(R.id.SCROLLER_ID);
+
 
         AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         int currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
@@ -496,6 +557,14 @@ public class MainActivity extends AppCompatActivity {
         float percent = 0.99f;
         int seventyVolume = (int) (maxVolume*percent);
         audio.setStreamVolume(AudioManager.STREAM_MUSIC, seventyVolume, 0);
+
+
+        mainHandler = new Handler(this.getMainLooper());
+
+        myRunnable = new Runnable() {
+            @Override
+            public void run() { listenRebuild(); } // This is your code
+        };
 
 
 
@@ -609,7 +678,23 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void speakWords(String speech) {
-        TTS.speak(speech, TextToSpeech.QUEUE_FLUSH, null);
+        HashMap<String, String> myHashAlarm = new HashMap<String, String>();
+        myHashAlarm.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_ALARM));
+        myHashAlarm.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "SOME MESSAGE");
+
+        //TTS.speak(speech, TextToSpeech.QUEUE_FLUSH, null);
+        Log.d("TTS","There are "+ TTS.getVoices().size());
+
+
+
+
+        /*List<Voice> list = new ArrayList<Voice>(TTS.getVoices());
+        Voice value = list.get(0);
+
+        TTS.setVoice(value);*/
+
+        TTS.speak(speech,TextToSpeech.QUEUE_FLUSH,myHashAlarm);
+
     }
 
 
@@ -619,6 +704,34 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onInit(int initStatus) {
                 if (initStatus == TextToSpeech.SUCCESS) {
+/////////////////////////////////
+
+                    TTS.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                        @Override
+                        public void onDone(String utteranceId) {
+                           //listenRebuild();
+                            Log.e("TTS", "Есть onDone");
+                            mainHandler.post(myRunnable);
+                            Log.e("TTS", "Есть onDone");
+                        }
+
+                        public void onUtteranceCompleted (String utteranceId){
+                            //listenRebuild();
+                            Log.e("TTS", "Есть onUtteranceCompleted");
+
+                        }
+                        @Override
+                        public void onError(String utteranceId) {
+                            Log.e("TTS", "Есть onError");
+                        }
+
+
+                        @Override
+                        public void onStart(String utteranceId) {
+                            Log.e("TTS", "Есть onStart");
+                        }
+                    });
+////////////////////////////////////
 
                     Locale locale = new Locale("ru");
 
