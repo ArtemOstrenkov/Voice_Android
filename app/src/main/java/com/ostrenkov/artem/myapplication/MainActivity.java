@@ -437,12 +437,16 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onResults(Bundle results)
         {
-            // getResultPhrase(results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION));
-          //  getResultWord(results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION));
-            // matches are the return values of speech recognition engine
-            // Use these values for whatever you wish to do
 
            //TODO:послать в очередь
+
+         //   ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+
+         //   if (!matches.get(0).equals("")) {
+         //       tvMain.setVisibility(View.VISIBLE);
+         //       tvMain.setText(matches.get(0));}
+
+
         }
 
         @Override
