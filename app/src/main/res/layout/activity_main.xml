@@ -38,7 +38,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:text="Добрый день. Чем могу быть вам полезен? (платежные поручения и кредиты моя страсть)"
+                android:text="Добрый день. Чем могу быть вам полезена? (платежные поручения и кредиты моя страсть)"
             />
 
 
@@ -69,12 +69,12 @@
         android:layout_alignBottom="@id/verL">
 
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/eChatSend"
-        android:layout_below="@id/verL"
-        />
+        <EditText
+            android:id="@+id/eChatSend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/verL"
+            android:background="@android:color/white" />
 
     <LinearLayout
         android:layout_width="match_parent"

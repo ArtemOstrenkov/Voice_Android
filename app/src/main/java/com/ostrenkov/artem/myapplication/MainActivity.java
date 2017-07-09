@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     public ScrollView mScrollView = null;
     private int tryagainlimit = 4;
     public int tryagain = tryagainlimit;
+    public boolean flagStartafter = false;
 
 
 
@@ -407,6 +408,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickClear(View view) {
 
+        flagStartafter = true;
         listenRebuild();
         //SendMessage("отмена");
 
@@ -616,7 +618,9 @@ public class MainActivity extends AppCompatActivity {
 
         myRunnable = new Runnable() {
             @Override
-            public void run() { listenRebuild(); } // This is your code
+            public void run() {
+              if (flagStartafter)  listenRebuild();
+            } // This is your code
         };
 
 
@@ -725,6 +729,9 @@ public class MainActivity extends AppCompatActivity {
         SpeechRecognitionListener listener = new SpeechRecognitionListener();
         mSpeechRecognizer.setRecognitionListener(listener);
         //mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
+
+
+        StartSpeak("Я готова");
 
 
     }

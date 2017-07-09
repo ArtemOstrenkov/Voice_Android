@@ -19,12 +19,12 @@
         android:id="@+id/bURL1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="apply"
+        android:layout_marginLeft="5dp"
         android:onClick="onClickApplyURL1"
-        tools:layout_editor_absoluteY="37dp"
+        android:text="apply 1"
 
         app:layout_constraintLeft_toRightOf="@+id/edURl1"
-        android:layout_marginLeft="8dp" />
+        tools:layout_editor_absoluteY="37dp" />
 
     <EditText
         android:id="@+id/edURL2"
@@ -40,13 +40,57 @@
         android:id="@+id/bURL2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Apply"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="6dp"
+
+
         android:onClick="onClickApplyURL2"
-
-
+        android:text="Apply 2"
         app:layout_constraintLeft_toRightOf="@+id/edURL2"
-        android:layout_marginLeft="7dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/bURL1" />
+
+    <Button
+        android:id="@+id/bURL3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+
+        android:onClick="onClickApplyURL2"
+        android:text="Apply 3"
+        app:layout_constraintLeft_toRightOf="@+id/edURL3"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="6dp"
+        app:layout_constraintTop_toBottomOf="@+id/bURL2" />
+
+    <EditText
+        android:id="@+id/edURL3"
+        android:layout_width="259dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="8dp"
+        android:text="URL3"
+        app:layout_constraintTop_toBottomOf="@+id/edURL2"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <EditText
+        android:id="@+id/edURL4"
+        android:layout_width="259dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="8dp"
+        android:text="URL4"
+        app:layout_constraintTop_toBottomOf="@+id/edURL3"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <Button
+        android:id="@+id/bURL4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="6dp"
+        android:onClick="onClickApplyURL2"
+        android:text="Apply 4"
+        app:layout_constraintLeft_toRightOf="@+id/edURL4"
+        app:layout_constraintTop_toBottomOf="@+id/bURL3" />
 
 </android.support.constraint.ConstraintLayout>

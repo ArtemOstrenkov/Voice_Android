@@ -58,4 +58,19 @@ public class Options extends AppCompatActivity {
         setparam("URL1",((TextView) findViewById(R.id.edURl1)).getText().toString());
         onBackPressed();
     }
+
+    public void onClickApplyURL3(View view) {
+
+        setparam("URL",((TextView) findViewById(R.id.edURL3)).getText().toString());
+        setparam("URL3",((TextView) findViewById(R.id.edURL3)).getText().toString());
+        onBackPressed();
+    }
+
+    public void onClickApplyURL4(View view) {
+
+        setparam("URL",((TextView) findViewById(R.id.edURL4)).getText().toString());
+        setparam("URL4",((TextView) findViewById(R.id.edURL4)).getText().toString());
+        onBackPressed();
+    }
+
 }
