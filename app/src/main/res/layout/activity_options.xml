@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ostrenkov.artem.myapplication.Options">
+
+
+    <EditText
+        android:id="@+id/edURl1"
+        android:layout_width="259dp"
+        android:layout_height="46dp"
+        android:text="URL1"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="37dp" />
+
+    <Button
+        android:id="@+id/bURL1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="apply"
+        android:onClick="onClickApplyURL1"
+        tools:layout_editor_absoluteY="37dp"
+
+        app:layout_constraintLeft_toRightOf="@+id/edURl1"
+        android:layout_marginLeft="8dp" />
+
+    <EditText
+        android:id="@+id/edURL2"
+        android:layout_width="257dp"
+        android:layout_height="50dp"
+        android:text="URL2"
+
+        tools:layout_editor_absoluteX="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/edURl1" />
+
+    <Button
+        android:id="@+id/bURL2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Apply"
+        android:onClick="onClickApplyURL2"
+
+
+        app:layout_constraintLeft_toRightOf="@+id/edURL2"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/bURL1" />
+
+</android.support.constraint.ConstraintLayout>

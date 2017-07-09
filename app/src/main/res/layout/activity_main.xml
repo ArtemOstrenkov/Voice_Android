@@ -92,7 +92,7 @@
             android:layout_alignParentBottom="true"
             android:layout_weight="1"
             android:onClick="onClickClear"
-            android:text="Start" />
+            android:text="Call" />
 
         <Button
             android:id="@+id/bPress"
@@ -101,7 +101,8 @@
             android:layout_alignEnd="@+id/webView"
             android:layout_alignParentBottom="true"
             android:layout_weight="1"
-            android:text="Press to talk" />
+            android:text="Press to talk"
+            android:visibility="gone"/>
 
 
         <Button

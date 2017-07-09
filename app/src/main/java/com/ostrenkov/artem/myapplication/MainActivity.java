@@ -2,6 +2,7 @@ package com.ostrenkov.artem.myapplication;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -70,6 +71,32 @@ public class MainActivity extends AppCompatActivity {
     public ScrollView mScrollView = null;
     private int tryagainlimit = 4;
     public int tryagain = tryagainlimit;
+
+
+
+    public void getparam(String name, String res){
+
+        SharedPreferences sharedPref = getSharedPreferences(name, MODE_PRIVATE);
+        String mySetting = sharedPref.getString(name, null);
+        res = mySetting;
+
+    }
+    public String getparam(String name){
+
+        SharedPreferences sharedPref = getSharedPreferences(name, MODE_PRIVATE);
+        String mySetting = sharedPref.getString(name, null);
+        return mySetting;
+
+    }
+
+    public void setparam(String name,  String res) {
+
+        SharedPreferences sharedPref = getSharedPreferences(name, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(name, res);
+        editor.commit();
+
+    }
 
     public String AddToHtml ( String newString) {
 
@@ -271,7 +298,8 @@ public class MainActivity extends AppCompatActivity {
 
         RequestQueue queue = Volley.newRequestQueue(this);
         //String url = "http://92.53.108.10:7888/api/v1/write";
-        String url = "http://82.202.192.186:10500";
+        String url = getparam("URL");
+        //String url = "http://82.202.192.186:10500";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -394,7 +422,12 @@ public class MainActivity extends AppCompatActivity {
 
       //  ( (EditText) findViewById(R.id.eChatSend)).sele
 
-        SendMessage(chatMess);
+
+        if (chatMess.equals("42")) {
+
+            Intent intent = new Intent(this, com.ostrenkov.artem.myapplication.Options.class);
+            startActivity(intent);
+        } else SendMessage(chatMess);
 
 
     }
@@ -475,7 +508,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReadyForSpeech(Bundle params)
         {
-            // Log.d(TAG, "onReadyForSpeech"); //$NON-NLS-1$ 
+            // Log.d(TAG, "onReadyForSpeech"); //$NON-NLS-1$
 
         }
 
@@ -488,9 +521,11 @@ public class MainActivity extends AppCompatActivity {
             ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
 
             if (!matches.get(0).equals("")) {
-                SendMessage(matches.get(0));
-                tryagain = tryagainlimit;
-                Log.d("Speech", "tryagain " + tryagain);
+
+                    SendMessage(matches.get(0));
+                    tryagain = tryagainlimit;
+                    Log.d("Speech", "tryagain " + tryagain);
+
             }
             else {
 
@@ -542,7 +577,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tvMain = (TextView) findViewById(R.id.tvHello);
+
+
+        SharedPreferences prefs = getSharedPreferences("com.ostrenkov.artem.seaspeak", MODE_PRIVATE);
+
+        if (prefs.getBoolean("firstrun", true)) {
+
+            setparam("URL","http://82.202.192.186:10500");
+            setparam("URL1","http://82.202.192.186:10500");
+            setparam("URL2","http://82.202.192.186:10500");
+            setparam("URL3","http://82.202.192.186:10500");
+            setparam("URL4","http://82.202.192.186:10500");
+
+            prefs.edit().putBoolean("firstrun", false).commit();
+        }
+
+
+
+
+            tvMain = (TextView) findViewById(R.id.tvHello);
         wbBrowse = (WebView) findViewById(R.id.webView);
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         bPress = (Button) findViewById(R.id.bPress);
@@ -596,6 +649,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                 return false;
+
+
             }
         });
 
@@ -670,8 +725,6 @@ public class MainActivity extends AppCompatActivity {
         SpeechRecognitionListener listener = new SpeechRecognitionListener();
         mSpeechRecognizer.setRecognitionListener(listener);
         //mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
-
-
 
 
     }
