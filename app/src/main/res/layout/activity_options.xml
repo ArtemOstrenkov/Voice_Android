@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ostrenkov.artem.myapplication.Options">
+    tools:context="com.ostrenkov.artem.myapplication.com.ostrenkov.artem.vb42.Options">
 
 
     <EditText
@@ -92,5 +92,14 @@
         android:text="Apply 4"
         app:layout_constraintLeft_toRightOf="@+id/edURL4"
         app:layout_constraintTop_toBottomOf="@+id/bURL3" />
+
+    <TextView
+        android:id="@+id/twUserID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:text="UserID = ???"
+        app:layout_constraintTop_toBottomOf="@+id/edURL4"
+        tools:layout_editor_absoluteX="119dp" />
 
 </android.support.constraint.ConstraintLayout>

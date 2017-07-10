@@ -1,10 +1,12 @@
-package com.ostrenkov.artem.myapplication;
+package com.ostrenkov.artem.vb42;
 
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import com.ostrenkov.artem.vb42.R;
 
 public class Options extends AppCompatActivity {
 
@@ -42,6 +44,10 @@ public class Options extends AppCompatActivity {
         ((TextView) findViewById(R.id.edURl1)).setText(getparam("URL1"));
         ((TextView) findViewById(R.id.edURL3)).setText(getparam("URL3"));
         ((TextView) findViewById(R.id.edURL4)).setText(getparam("URL4"));
+
+        String ph = "UserID = " + getparam("userID");
+        ((TextView) findViewById(R.id.twUserID)).setText(ph);
+
 
 
     }

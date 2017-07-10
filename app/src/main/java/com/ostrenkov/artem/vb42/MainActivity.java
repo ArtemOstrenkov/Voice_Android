@@ -1,19 +1,16 @@
-package com.ostrenkov.artem.myapplication;
+package com.ostrenkov.artem.vb42;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Handler;
-import android.os.Looper;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
-import android.speech.tts.Voice;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -21,7 +18,6 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewDebug;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -38,6 +34,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.ostrenkov.artem.vb42.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,11 +43,8 @@ import org.json.JSONObject;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Random;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -73,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private int tryagainlimit = 4;
     public int tryagain = tryagainlimit;
     public boolean flagStartafter = false;
+    public String userID = "123";
 
 
 
@@ -280,6 +275,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public byte[] getBody() throws AuthFailureError {
                 String mess ="{\"message\": \"" + sMyMessageInternal + "\", \"user\": \"124\"}";
+                Log.d("GETBODYWRONG","UPS "+mess);
                 return mess.getBytes(Charset.forName("UTF-8"));
             }
         };
@@ -377,7 +373,9 @@ public class MainActivity extends AppCompatActivity {
                 }) {
             @Override
             public byte[] getBody() throws AuthFailureError {
-                String mess ="{\"text\": \"" + sMyMessageInternal + "\", \"user_id\": \"123\"}";
+               // String mess ="{\"text\": \"" + sMyMessageInternal + "\", \"user_id\": \"123\"}";
+                String mess ="{\"text\": \"" + sMyMessageInternal + "\", \"user_id\": \""+userID+"\"}";
+                Log.d("GETBODY",mess);
                 ///((TextView) findViewById(R.id.textChat)).setText(Html.fromHtml(AddToHtmlRight(sAnswer)));
                 return mess.getBytes(Charset.forName("UTF-8"));
             }
@@ -429,7 +427,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (chatMess.equals("42")) {
 
-            Intent intent = new Intent(this, com.ostrenkov.artem.myapplication.Options.class);
+            Intent intent = new Intent(this, Options.class);
             startActivity(intent);
         } else SendMessage(chatMess);
 
@@ -593,10 +591,19 @@ public class MainActivity extends AppCompatActivity {
             setparam("URL3","http://82.202.192.186:10500");
             setparam("URL4","http://82.202.192.186:10500");
 
+            int min = 65;
+            int max = 500;
+
+            Random r = new Random();
+            int i1 = r.nextInt(max - min + 1) + min;
+
+            setparam("userID","1"+i1);
 
 
             prefs.edit().putBoolean("firstrun", false).commit();
         }
+
+        userID = getparam("userID");
 
 
 
@@ -802,7 +809,7 @@ public class MainActivity extends AppCompatActivity {
 
                     int result = TTS.setLanguage(locale);
 
-
+                    
                     if (result == TextToSpeech.LANG_MISSING_DATA
                             || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                         Log.e("TTS", "Извините, этот язык не поддерживается");
