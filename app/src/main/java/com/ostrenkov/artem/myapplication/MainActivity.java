@@ -49,6 +49,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
@@ -278,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
                 }) {
             @Override
             public byte[] getBody() throws AuthFailureError {
-                String mess ="{\"message\": \"" + sMyMessageInternal + "\", \"user\": \"123\"}";
+                String mess ="{\"message\": \"" + sMyMessageInternal + "\", \"user\": \"124\"}";
                 return mess.getBytes(Charset.forName("UTF-8"));
             }
         };
@@ -409,7 +410,8 @@ public class MainActivity extends AppCompatActivity {
     public void onClickClear(View view) {
 
         flagStartafter = true;
-        listenRebuild();
+        StartSpeak("Слушаю вас");
+        //listenRebuild();
         //SendMessage("отмена");
 
         //StartSpeak("Я говорю по русски");
@@ -591,6 +593,8 @@ public class MainActivity extends AppCompatActivity {
             setparam("URL3","http://82.202.192.186:10500");
             setparam("URL4","http://82.202.192.186:10500");
 
+
+
             prefs.edit().putBoolean("firstrun", false).commit();
         }
 
@@ -669,7 +673,7 @@ public class MainActivity extends AppCompatActivity {
         wbBrowse.getSettings().setUseWideViewPort(true);
         wbBrowse.getSettings().setJavaScriptEnabled(true);
         wbBrowse.getSettings().setBuiltInZoomControls(true);
-        wbBrowse.loadUrl("https://yandex.ru");
+        //wbBrowse.loadUrl("https://yandex.ru");
         wbBrowse.setBackgroundColor(0);
 
       /*
@@ -772,6 +776,7 @@ public class MainActivity extends AppCompatActivity {
                            //listenRebuild();
                             Log.e("TTS", "Есть onDone");
                             mainHandler.post(myRunnable);
+                            //listenRebuild();
                             Log.e("TTS", "Есть onDone");
                         }
 

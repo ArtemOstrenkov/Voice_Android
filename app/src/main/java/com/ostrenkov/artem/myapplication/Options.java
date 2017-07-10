@@ -40,6 +40,8 @@ public class Options extends AppCompatActivity {
 
         ((TextView) findViewById(R.id.edURL2)).setText(getparam("URL2"));
         ((TextView) findViewById(R.id.edURl1)).setText(getparam("URL1"));
+        ((TextView) findViewById(R.id.edURL3)).setText(getparam("URL3"));
+        ((TextView) findViewById(R.id.edURL4)).setText(getparam("URL4"));
 
 
     }
