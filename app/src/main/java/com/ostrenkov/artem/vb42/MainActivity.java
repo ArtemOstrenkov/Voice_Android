@@ -809,7 +809,7 @@ public class MainActivity extends AppCompatActivity {
 
                     int result = TTS.setLanguage(locale);
 
-                    
+
                     if (result == TextToSpeech.LANG_MISSING_DATA
                             || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                         Log.e("TTS", "Извините, этот язык не поддерживается");
