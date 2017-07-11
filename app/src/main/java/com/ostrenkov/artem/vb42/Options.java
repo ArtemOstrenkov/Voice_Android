@@ -48,6 +48,9 @@ public class Options extends AppCompatActivity {
         String ph = "UserID = " + getparam("userID");
         ((TextView) findViewById(R.id.twUserID)).setText(ph);
 
+        ((TextView) findViewById(R.id.edSpeedRate)).setText(getparam("SPEED"));
+        ((TextView) findViewById(R.id.edVoicePitch)).setText(getparam("PITCH"));
+
 
 
     }
@@ -81,4 +84,15 @@ public class Options extends AppCompatActivity {
         onBackPressed();
     }
 
+    public void onClickSPEED(View view) {
+
+        setparam("SPEED",((TextView) findViewById(R.id.edSpeedRate)).getText().toString());
+
+    }
+
+    public void onClickPitch(View view) {
+
+        setparam("PITCH",((TextView) findViewById(R.id.edVoicePitch)).getText().toString());
+
+    }
 }

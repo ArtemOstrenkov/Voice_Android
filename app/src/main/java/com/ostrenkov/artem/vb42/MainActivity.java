@@ -1,9 +1,11 @@
 package com.ostrenkov.artem.vb42;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.speech.RecognitionListener;
@@ -11,6 +13,8 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -44,6 +48,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -68,6 +73,9 @@ public class MainActivity extends AppCompatActivity {
     public int tryagain = tryagainlimit;
     public boolean flagStartafter = false;
     public String userID = "123";
+    public Float fSPEED = 1.1f;
+    public Float fPITCH = 1.3f;
+
 
 
 
@@ -524,9 +532,13 @@ public class MainActivity extends AppCompatActivity {
 
             if (!matches.get(0).equals("")) {
 
+                if (matches.get(0).equals("стоп")) flagStartafter = false;
+                else {
                     SendMessage(matches.get(0));
                     tryagain = tryagainlimit;
                     Log.d("Speech", "tryagain " + tryagain);
+
+                }
 
             }
             else {
@@ -581,6 +593,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+        //ActivityCompat.requestPermissions(MainActivity.this,
+        //        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+        //        1);
+        int MYRECORD_AUDIO = 1;
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.RECORD_AUDIO},MYRECORD_AUDIO);
+
+        }
+
+        Log.d("REQUEST RESULT"," " + MYRECORD_AUDIO);
+
         SharedPreferences prefs = getSharedPreferences("com.ostrenkov.artem.seaspeak", MODE_PRIVATE);
 
         if (prefs.getBoolean("firstrun", true)) {
@@ -590,6 +617,10 @@ public class MainActivity extends AppCompatActivity {
             setparam("URL2","http://82.202.192.186:10500");
             setparam("URL3","http://82.202.192.186:10500");
             setparam("URL4","http://82.202.192.186:10500");
+
+            setparam("SPEED","1.0");
+            setparam("PITCH","1.0");
+
 
             int min = 65;
             int max = 500;
@@ -604,7 +635,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         userID = getparam("userID");
-
+        fPITCH = Float.parseFloat(getparam("PITCH"));
+        fSPEED = Float.parseFloat(getparam("SPEED"));
 
 
 
@@ -810,6 +842,7 @@ public class MainActivity extends AppCompatActivity {
                     int result = TTS.setLanguage(locale);
 
 
+
                     if (result == TextToSpeech.LANG_MISSING_DATA
                             || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                         Log.e("TTS", "Извините, этот язык не поддерживается");
@@ -819,8 +852,11 @@ public class MainActivity extends AppCompatActivity {
 
 
                     //if(TTS.isLanguageAvailable(Locale.US)==TextToSpeech.LANG_AVAILABLE) TTS.setLanguage(Locale.US);
-                    TTS.setPitch(1.3f);
-                    TTS.setSpeechRate(0.7f);
+                    fPITCH = Float.parseFloat(getparam("PITCH"));
+                    fSPEED = Float.parseFloat(getparam("SPEED"));
+
+                    TTS.setPitch(fPITCH);
+                    TTS.setSpeechRate(fSPEED);
 
                     // start speak
                     speakWords(data);
