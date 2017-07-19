@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     public TextView tvMain = null;
     public WebView wbBrowse = null;
     public String sAnswer = "Что вы хотите подобрать?";
+    public String sCORR_Messsage = "";
     public Button bPress = null;
     public String HTMLmessage = "<h3>" +sAnswer + "</h3>";
     public Handler mainHandler = null;
@@ -125,6 +126,12 @@ public class MainActivity extends AppCompatActivity {
         return HTMLmessage;
     }
 
+    public String AddToHtmlCM ( String newString) {
+
+        HTMLmessage = HTMLmessage + "<h4 ><font align=right color=red>" + newString + "</font></h4>";
+
+        return HTMLmessage;
+    }
 
     public void getResultWord(ArrayList<String> matches) {
         int sadday = 0;
@@ -328,9 +335,13 @@ public class MainActivity extends AppCompatActivity {
                             //dataJsonArr = json.getJSONArray("response");
 
                             String resp = json.getString("response");
+                            String corrected_message = json.getString("corrected_message");
+
 
                             Log.d("MyTag",resp);
+                            Log.d("MyTag",corrected_message);
 
+                            sCORR_Messsage  = corrected_message;
                             sAnswer = resp;
 
                             //Toast.makeText(MainActivity.this, "Json lenght: " + dataJsonArr.length(), Toast.LENGTH_SHORT).show();
@@ -362,6 +373,7 @@ public class MainActivity extends AppCompatActivity {
                         //  Log.d("MyTag",sAnswer.toLowerCase() + "Отменил выбор".toLowerCase());
                         tvMain.setText(sAnswer);
 
+                        ((TextView) findViewById(R.id.textChat)).setText(Html.fromHtml(AddToHtmlCM(sCORR_Messsage)));
                         ((TextView) findViewById(R.id.textChat)).setText(Html.fromHtml(AddToHtmlleft(sAnswer)));
 
                         scrollToBottom();
